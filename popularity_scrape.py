@@ -18,12 +18,11 @@ def get_html(url):
         requested page. However, if there were problems with the request, return None.
     ''' 
     try:
-        with closing(get(url, stream = True)) as resp:
+        with closing(get(url, stream=True)) as resp:
             if quality_response(resp):
                 return resp.content
             else:
                 return None
-
     except RequestException as re:
         print(f"There was an error during requests to {url} : {str(re)}")
         return None
@@ -46,14 +45,11 @@ def get_names():
     if response is not None:
         soup = BeautifulSoup(response, "html.parser")
         names = set()
-
         for li in soup.select("li"):
             for name in li.text.split("\n"):
                 if len(name) > 0:
                     names.add(name.strip())
-
         return list(names)
-    
     raise Exception(f"There was an error retrieving contents at {url}")
 
 def get_hits(name):
@@ -70,13 +66,10 @@ def get_hits(name):
         hit_link = [ hl for hl in soup.select("a") if hl["href"].find("latest-60") > -1 ]
         if len(hit_link) > 0:
             text = hit_link[0].text.replace(",", "")
-
             try:
                 return int(text)
-
             except:
                 print(f"Could not parse {text} as an INT.")
-
     print(f"No page views found for {name}.")
     return None
 
@@ -103,7 +96,6 @@ if __name__ == "__main__":
             if hit is None:
                 hit = -1
             results.append((hit, name))
-
         except:
             results.append((-1, name))
             print(f"There was an error while processing {name}, so we are skipping...")

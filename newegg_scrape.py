@@ -17,12 +17,11 @@ def get_html(url):
         requested page. However, if there were problems with the request, return None.
     '''
     try:
-        with closing(get(url, stream = True)) as resp:
+        with closing(get(url, stream=True)) as resp:
             if quality_response(resp):
                 return resp.content
             else:
                 return None
-
     except RequestException as re:
         print(f"There was an error during requests to {url} : {str(re)}")
         return None
@@ -43,10 +42,8 @@ def get_products():
     response = get_html(url)
 
     items_desc = []
-
     if response is not None:
         soup = BeautifulSoup(response, "html.parser")
-
         products = soup.find_all("div", {"class": "item-container"})
         for product in products:
             brand = product.div.div.a.img["title"]
@@ -59,9 +56,7 @@ def get_products():
             shipping = product.find("li", {"class": "price-ship"}).text.strip()
 
             items_desc.append((brand, product_name, full_price, shipping))
-
         return items_desc
-
     raise Exception(f"There was an error retrieving contents at {url}")
 
 def write_products(item_desc):
@@ -71,15 +66,12 @@ def write_products(item_desc):
     '''
     headers = "brand, product_name, product_price, shipping\n"
     filename = "products.csv"
-
     try: 
         f = open(filename, "w")
         f.write(headers)
-
         for brand, product_name, product_price, shipping in item_desc:
             f.write(brand.replace(","," ") + "," + product_name.replace(",", "|") + ",$" + product_price + "," + shipping + "\n")
         f.close()
-
     except:
         print("There was an error writing to the CSV data file.")
     

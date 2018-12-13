@@ -23,12 +23,11 @@ def get_html(url):
                  "X-Requested-With": "XMLHttpRequest"
              }
     try:
-        with closing(get(url, stream = True, headers = header)) as resp:
+        with closing(get(url, stream=True, headers=header)) as resp:
             if quality_response(resp):
                 return resp.content
             else:
                 return None
-
     except RequestException as re:
         print(f"There was an error during requests to {url} : {str(re)}")
         return None
@@ -58,10 +57,8 @@ def get_stocks(stocks):
             perc_change = soup.find("span", {"class": "changePercent__2d7dc0d2"}).text
 	
             data.append((name, price, net_change, perc_change))
-
         else:
             raise Exception(f"There was an error retrieving contents at {st}")
-            
     return data
 
 def write_stocks(region, data):
@@ -73,7 +70,6 @@ def write_stocks(region, data):
 
     with open(filename, "w") as f:
         writer = csv.writer(f)
-
         writer.writerow(["name", "price", "net_change", "perc_change", "datetime"])
         for name, price, net_change, perc_change in data:
             writer.writerow([name, price, net_change, perc_change, datetime.now()])

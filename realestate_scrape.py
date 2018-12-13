@@ -1,5 +1,6 @@
-import requests, pandas
 from bs4 import BeautifulSoup
+import requests
+import pandas
 
 req = requests.get("http://www.pythonhow.com/real-estate/rock-springs-wy/LCWYROCKSPRINGS/")
 soup = BeautifulSoup(req.content, "html.parser")
@@ -15,7 +16,6 @@ for page in range(0, int(pageNum)*10, 10):
 
     for data in dataSet:
         d = {}
-        
         try:
             d["Price"] = data.find("h4", {"class": "propPrice"}).text.strip()
         except:
@@ -57,7 +57,6 @@ for page in range(0, int(pageNum)*10, 10):
                     d["Lot Size"] = featureName.text
                 else:
                     d["Lot Size"] = None
-        
         infoSet.append(d)
 
 df = pandas.DataFrame(infoSet)
